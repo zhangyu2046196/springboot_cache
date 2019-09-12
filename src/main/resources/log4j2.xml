@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 配置日志文件输出目录 -->
+    <Properties>
+        <Property name="LOG_HOME">${sys:app.Home}/logs</Property>
+    </Properties>
+
+    <appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" /> 
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %t %-5level %class{36} %L %M | %msg%xEx%n" />
+        </Console>
+        <!-- info级别日志文件 -->
+        <RollingRandomAccessFile name="info_appender" fileName="${LOG_HOME}/app-info.log" filePattern="${LOG_HOME}/app-info.log.%d{yyyy-MM-dd}">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %t %-5level %class{36} %L %M | %msg%xEx%n" />
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- warn级别日志文件 -->
+        <RollingRandomAccessFile name="warn_appender" fileName="${LOG_HOME}/app-warn.log" filePattern="${LOG_HOME}/app-warn.log.%d{yyyy-MM-dd}">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %t %-5level %class{36} %L %M | %msg%xEx%n" />
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!-- error级别日志文件 -->
+        <RollingRandomAccessFile name="error_appender" fileName="${LOG_HOME}/app-error.log" filePattern="${LOG_HOME}/app-error.log.%d{yyyy-MM-dd}">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %t %-5level %class{36} %L %M | %msg%xEx%n" />
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingRandomAccessFile>
+    </appenders>
+
+
+    <loggers> 
+        <root level="info">
+            <appender-ref ref="console" />
+        </root>
+
+        <logger name="org.springframework">
+            <level value="info"/>
+        </logger>
+        <logger name="org.springframework.beans">
+            <level value="info"/>
+        </logger>
+        <logger name="org.springframework.context">
+            <level value="info"/>
+        </logger>
+        <logger name="org.springframework.web">
+            <level value="info"/>
+        </logger>
+
+        <logger name="com.youyuan" additivity="false">
+            <appender-ref ref="info_appender" />
+            <appender-ref ref="warn_appender" />
+            <appender-ref ref="error_appender" />
+        </logger>
+        <logger name="pay" additivity="false">
+            <appender-ref ref="info_appender" />
+            <appender-ref ref="warn_appender" />
+            <appender-ref ref="error_appender" />
+        </logger>
+    </loggers>
+</configuration>

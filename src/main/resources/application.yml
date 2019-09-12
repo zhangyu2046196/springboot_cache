@@ -1,0 +1,38 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/jpa
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+    #标记update代表没有表时创建，有表时如果表结构修改启动时修改
+      ddl-auto: update
+    #标记显示执行的sql
+    show-sql: true
+
+  # 缓存配置读取
+    cache:
+      type: ehcache
+      ehcache:
+        config: classpath:ehcache.xml
+  redis:
+    host: 192.168.123.251
+    port: 6379
+#    database: 0
+#    timeout: 10000
+#    cluster:
+#      nodes:
+#        - 192.168.123.251:6379
+#        - 192.168.123.251:6380
+#        - 192.168.123.252:6379
+#        - 192.168.123.252:6380
+#        - 192.168.123.253:6379
+#        - 192.168.123.253:6380
+
+logging:
+  config:classpath: log4j2.xml
+
